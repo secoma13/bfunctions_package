@@ -1,0 +1,89 @@
+\NeedsTexFormat{LaTeX2e}
+\ProvidesPackage{bfunctions}[]
+
+% --------------------------------
+% Common parenthesis and brackets
+% ---------------------------------
+\newcommand{\parent}[1]{
+    \left( #1 \right)
+}
+
+\newcommand{\corch}[1]{
+    \left\{ #1 \right\}
+}
+
+\newcommand{\sqparent}[1]{
+    \left[ \right]
+}
+
+\newcommand{\abs}[1]{
+\left| #1 \right|
+}
+
+\newcommand{\norm}[1]{
+\left\lVert #1 \right\rVert
+}
+
+% ------------------------------------
+% mathbb leters for common sets
+% ------------------------------------
+\newcommand{\R}[0]{
+    \mathbb{R}
+}
+
+\newcommand{\N}[0]{
+    \mathbb{N}
+}
+
+\newcommand{\Z}[0]{
+    \mathbb{Z}
+}
+
+\newcommand{\Q}[0]{
+    \mathbb{Q}
+}
+
+\newcommand{\K}[0]{
+    \mathbb{K}
+}
+
+\newcommand{\C}[0]{
+    \mathbb{C}
+}
+
+\renewcommand{\S}{
+    \mathbb{S}
+}
+
+\newcommand{\H}[0]{
+    \mathbb{H}
+}
+
+\newcommand{\T}[0]{
+    \mathbb{T}
+}
+
+% ---------------------------------------------------
+%  Symbols for differentials and derivatives
+% ---------------------------------------------------
+\newcommand{\diff}[0]{
+    \mathrm{d} \hspace{2 pt}
+}
+
+
+% Render derivative at a point
+\newcommand{\derivpoint}[3]{
+    \left.\frac{\diff #1}{\diff #2}\right|_{#3}
+}
+
+\newcommand{\deriv}[2]{
+    \frac{\diff #1}{\diff #2} 
+}
+
+\newcommand{\derpar}[2]{
+    \frac{\partial #1}{\partial #2}
+}
+
+\newcommand{\derparpoint}[2]{
+    \left. \frac{\partial #1}{\partial #2} \right|_{#3}
+}
