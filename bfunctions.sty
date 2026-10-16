@@ -1,21 +1,12 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{bfunctions}[v.01]
 
-\RequirePackage{xcolor}
+\RequirePackage[dvipsnames]{xcolor}
 \RequirePackage{keyval} % used to handle options passed to the package
 \RequirePackage[most]{tcolorbox}
 \RequirePackage{amsfonts}
 \RequirePackage{amsthm}
 \tcbuselibrary{skins}
-
-% language=latex
-\makeatletter
-\@ifundefined{c@chapter}{%
-  \def\bfn@within{section}%
-}{%
-  \def\bfn@within{chapter}%
-}
-\makeatother
 
 
 \definecolor{darkred}{HTML}{9C1E07}
@@ -29,57 +20,78 @@
 \newif\if@bold
 \newif\if@mathb
 
+
+
 % Handle languages
 % Raise error if both languages are set as inputs
-\DeclareOption{spanish}{
-    \if@english 
-        \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}
-    \else\if@french
-        \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}
-    \fi
-    \@spanishtrue
-}
+\DeclareOption{spanish}{\@spanishtrue}
+\DeclareOption{english}{\@englishtrue}
+\DeclareOption{french}{\@frenchtrue}
 
-\DeclareOption{english}{
-    \if@spanish
-        \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}
-    \else\if@french
-        \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}
-    \fi
-    \@englishtrue
-}
-
-\DeclareOption{french}{
-    \if@english
-        \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}
-    \else\if\@spanish
-        \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}
-    \fi
-    \@frenchtrue
-}
-
-% Defaults to english
-\ExecuteOptions{english}
 
 % Handle math fonts
-\DeclareOption{mathb}{
-    \if@bold
-        \PackageError{bfunctions}{Cannot call bfunctions with two or more math font options at the same time}
-    \fi
-    \@mathbtrue
-}
+\DeclareOption{mathb}{\@mathbtrue}
+\DeclareOption{bold}{\@boldtrue}
 
-\DeclareOption{bold}{
-    \if@mathb
-        \PackageError{bfunctions}{Cannot call bfunctions with two or more math font options at the same time}
-    \fi
-    \@boldtrue
-}
-
-% Defaults to mathbb
-\ExecuteOptions{mathb}
-
+% parsing user input
 \ProcessOptions\relax
+
+% Defaults to english and mathbb
+% Default language
+\if@spanish
+\else
+    \if@french
+        \else
+            \@englishtrue
+        \fi
+\fi
+
+% Default math font: mathb, if none was selected
+\if@bold
+\else
+    \if@mathb
+        \else
+            \@mathbtrue
+        \fi
+\fi
+
+% Handle multiple language inputs
+\if@spanish
+    \if@english
+        \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}{Call a single language option}
+    \else
+        \if@french
+            \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}{Call a single language option}
+        \fi
+    \fi
+\fi
+
+\if@english
+    \if@spanish
+        \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}{Call a single language option}
+    \else
+        \if@french
+            \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}{Call a single language option}
+        \fi
+    \fi
+\fi
+
+\if@french
+    \if@english
+        \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}{Call a single language option}
+    \else
+        \if@french
+            \PackageError{bfunctions}{Cannot call bfunctions with two or more language options at the same time}{Call a single language option}
+        \fi
+    \fi
+\fi
+
+% Handle multiple math font inputs
+\if@mathb
+    \if@bold
+        \PackageError{bfunctions}{Cannot call bfunctions with two or more font options at the same time}{Call a single font option}
+    \fi
+\fi
 
 
 % --------------------------------
@@ -127,7 +139,7 @@
     \newcommand{\K}[0]{\mathbf{K}}
     \newcommand{\C}[0]{\mathbf{C}}
     \renewcommand{\S}{\mathbf{S}}
-    \newcommand{\H}[0]{\mathbf{H}}
+    \renewcommand{\H}[0]{\mathbf{H}}
     \newcommand{\T}[0]{\mathbf{T}}
 \fi    
     
@@ -169,16 +181,20 @@
 }
 
 % -----------------------------------------------------------
-% Quickly acces accent colors
+% Quickly access accent colors
 % ------------------------------------------------------------ç
 
 \if@english
-    \newcommand{\Solution}[1]{{\color{blue}\textbf{Solution:} #1}}
-\else\if@french
-    \newcommand{\Solution}[1]{{\color{blue}\textbf{Solution:} #1}}
-\else\if@spanish
-    \newcommand{\Solution}[1]{{\color{blue}\textbf{Solución:} #1}}
-\fi\fi\fi
+    \newcommand{\Solution}[1]{\newline \newline{\color{blue}\textbf{Solution:} #1}}
+\else
+    \if@french
+        \newcommand{\Solution}[1]{\newline \newline{\color{blue}\textbf{Solution:} #1}}
+    \else
+        \if@spanish
+            \newcommand{\Solution}[1]{\newline \newline{\color{blue}\textbf{Solución:} #1}}
+        \fi
+    \fi
+\fi
 
 \newcommand{\Highlight}[1]{
     {\color{darkred} 
@@ -206,7 +222,11 @@
 
 % Definitions for theorems, propositions, definitions etc
 \if@english
-    \newtheorem{theorem}{Theorem}[\bfn@within]
+    % Handle the case where no chapter counter is set
+    \@ifundefined{c@chapter}
+        {\newtheorem{theorem}{Theorem}} 
+        {\newtheorem{theorem}{Theorem}[chapter]} 
+
     \newtheorem{definition}[theorem]{Definition}
     \newtheorem{corollary}[theorem]{Corollary}
     \newtheorem{prop}[theorem]{Proposition}
@@ -216,8 +236,11 @@
     \newtheorem{nota}[theorem]{Notation}
 
 \else\if@french
-    \theoremstyle{definition}
-    \newtheorem{theorem}{Théorème}[\bfn@within]
+    % Handle thw case where no chapter counter is set
+    \@ifundefined{c@chapter}
+        {\newtheorem{theorem}{Théorème}} 
+        {\newtheorem{theorem}{Théorème}[chapter]} 
+
     \newtheorem{definition}[theorem]{Definition}
     \newtheorem{corollary}[theorem]{Corollaire}
     \newtheorem{prop}[theorem]{Proposition}
@@ -227,8 +250,11 @@
     \newtheorem{nota}[theorem]{Notation}
 
 \else\if@spanish
-    \theoremstyle{definition}
-    \newtheorem{theorem}{Teorema}[\bfn@within]
+    % Handle thw case where no chapter counter is set
+    \@ifundefined{c@chapter}
+        {\newtheorem{theorem}{Teorema}} 
+        {\newtheorem{theorem}{Teorema}[chapter]} 
+
     \newtheorem{definition}[theorem]{Definición}
     \newtheorem{corollary}[theorem]{Corolario}
     \newtheorem{prop}[theorem]{Proposición}
@@ -315,78 +341,3 @@
 
 % End of package
 \endinput
-
-% CHAT GPT
-% language=latex
-\makeatletter
-\newif\ifbfn@numbered
-
-% Decide the "within" counter if available; otherwise mark unnumbered
-\@ifundefined{c@chapter}{%
-  \@ifundefined{c@section}{%
-    \bfn@numberedfalse % no chapter, no section -> unnumbered theorems
-  }{%
-    \def\bfn@within{section}\bfn@numberedtrue
-  }%
-}{%
-  \def\bfn@within{chapter}\bfn@numberedtrue
-}
-\makeatother
-
-% Helper to create theorem-like environments consistently
-\makeatletter
-\newcommand\bfn@newtheorem[2]{%
-  \ifbfn@numbered
-    \newtheorem{#1}[theorem]{#2}%
-  \else
-    \newtheorem*{#1}{#2}%
-  \fi
-}
-\makeatother
-
-
-% language=latex
-\if@english
-  \ifbfn@numbered
-    \newtheorem{theorem}{Theorem}[\bfn@within]
-  \else
-    \newtheorem*{theorem}{Theorem}
-  \fi
-  \bfn@newtheorem{definition}{Definition}
-  \bfn@newtheorem{corollary}{Corollary}
-  \bfn@newtheorem{prop}{Proposition}
-  \bfn@newtheorem{lemma}{Lemma}
-  \bfn@newtheorem{example}{Example}
-  \bfn@newtheorem{obs}{Remark}
-  \bfn@newtheorem{nota}{Notation}
-
-  % language=latex
-\else\if@french
-  \ifbfn@numbered
-    \newtheorem{theorem}{Théorème}[\bfn@within]
-  \else
-    \newtheorem*{theorem}{Théorème}
-  \fi
-  \bfn@newtheorem{definition}{Definition}
-  \bfn@newtheorem{corollary}{Corollaire}
-  \bfn@newtheorem{prop}{Proposition}
-  \bfn@newtheorem{lemma}{Lemme}
-  \bfn@newtheorem{example}{Exemple}
-  \bfn@newtheorem{obs}{Remarque}
-  \bfn@newtheorem{nota}{Notation}
-
-  % language=latex
-\else\if@spanish
-  \ifbfn@numbered
-    \newtheorem{theorem}{Teorema}[\bfn@within]
-  \else
-    \newtheorem*{theorem}{Teorema}
-  \fi
-  \bfn@newtheorem{definition}{Definición}
-  \bfn@newtheorem{corollary}{Corolario}
-  \bfn@newtheorem{prop}{Proposición}
-  \bfn@newtheorem{lemma}{Lema}
-  \bfn@newtheorem{example}{Ejemplo}
-  \bfn@newtheorem{obs}{Observación}
-  \bfn@newtheorem{nota}{Notación}
-\fi\fi\fi
