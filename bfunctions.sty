@@ -1,11 +1,22 @@
-\NeedsTexFormat{LaTeX2e}
-\ProvidesPackage{bfunctions}[]
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bfunctions}[v.01]
 
 \RequirePackage{xcolor}
 \RequirePackage{keyval} % used to handle options passed to the package
 \RequirePackage[most]{tcolorbox}
 \RequirePackage{amsfonts}
+\RequirePackage{amsthm}
 \tcbuselibrary{skins}
+
+% language=latex
+\makeatletter
+\@ifundefined{c@chapter}{%
+  \def\bfn@within{section}%
+}{%
+  \def\bfn@within{chapter}%
+}
+\makeatother
+
 
 \definecolor{darkred}{HTML}{9C1E07}
 
@@ -65,6 +76,10 @@
     \@boldtrue
 }
 
+% Defaults to mathbb
+\ExecuteOptions{mathb}
+
+\ProcessOptions\relax
 
 
 % --------------------------------
@@ -79,7 +94,7 @@
 }
 
 \newcommand{\sqparent}[1]{
-    \left[ \right]
+    \left[ #1 \right]
 }
 
 \newcommand{\abs}[1]{
@@ -102,7 +117,7 @@
     \newcommand{\K}[0]{\mathbb{K}}
     \newcommand{\C}[0]{\mathbb{C}}
     \renewcommand{\S}{\mathbb{S}}
-    \newcommand{\H}[0]{\mathbb{H}}
+    \renewcommand{\H}[0]{\mathbb{H}}
     \newcommand{\T}[0]{\mathbb{T}}
 \else
     \newcommand{\R}[0]{\mathbf{R}}
@@ -145,7 +160,7 @@
     \left.\frac{\diff ^{#3} #1}{\diff #2^{#3}}\right|_{#4}
 }
 
-\newcommand{\derparpoint}[2]{
+\newcommand{\derparpoint}[3]{
     \left. \frac{\partial #1}{\partial #2} \right|_{#3}
 }
 
@@ -163,6 +178,7 @@
     \newcommand{\Solution}[1]{{\color{blue}\textbf{Solution:} #1}}
 \else\if@spanish
     \newcommand{\Solution}[1]{{\color{blue}\textbf{Solución:} #1}}
+\fi\fi\fi
 
 \newcommand{\Highlight}[1]{
     {\color{darkred} 
@@ -190,7 +206,7 @@
 
 % Definitions for theorems, propositions, definitions etc
 \if@english
-    \newtheorem{theorem}{Theorem}[chapter]
+    \newtheorem{theorem}{Theorem}[\bfn@within]
     \newtheorem{definition}[theorem]{Definition}
     \newtheorem{corollary}[theorem]{Corollary}
     \newtheorem{prop}[theorem]{Proposition}
@@ -201,7 +217,7 @@
 
 \else\if@french
     \theoremstyle{definition}
-    \newtheorem{theorem}{Théorème}[chapter]
+    \newtheorem{theorem}{Théorème}[\bfn@within]
     \newtheorem{definition}[theorem]{Definition}
     \newtheorem{corollary}[theorem]{Corollaire}
     \newtheorem{prop}[theorem]{Proposition}
@@ -212,7 +228,7 @@
 
 \else\if@spanish
     \theoremstyle{definition}
-    \newtheorem{theorem}{Teorema}[chapter]
+    \newtheorem{theorem}{Teorema}[\bfn@within]
     \newtheorem{definition}[theorem]{Definición}
     \newtheorem{corollary}[theorem]{Corolario}
     \newtheorem{prop}[theorem]{Proposición}
@@ -220,7 +236,7 @@
     \newtheorem{example}[theorem]{Ejemplo}
     \newtheorem{obs}[theorem]{Observación}
     \newtheorem{nota}[theorem]{Notación}
-\fi
+\fi\fi\fi
 
 
 \NewTotalTColorBox[]{\Bluebox}{ +m }{ 
@@ -299,3 +315,78 @@
 
 % End of package
 \endinput
+
+% CHAT GPT
+% language=latex
+\makeatletter
+\newif\ifbfn@numbered
+
+% Decide the "within" counter if available; otherwise mark unnumbered
+\@ifundefined{c@chapter}{%
+  \@ifundefined{c@section}{%
+    \bfn@numberedfalse % no chapter, no section -> unnumbered theorems
+  }{%
+    \def\bfn@within{section}\bfn@numberedtrue
+  }%
+}{%
+  \def\bfn@within{chapter}\bfn@numberedtrue
+}
+\makeatother
+
+% Helper to create theorem-like environments consistently
+\makeatletter
+\newcommand\bfn@newtheorem[2]{%
+  \ifbfn@numbered
+    \newtheorem{#1}[theorem]{#2}%
+  \else
+    \newtheorem*{#1}{#2}%
+  \fi
+}
+\makeatother
+
+
+% language=latex
+\if@english
+  \ifbfn@numbered
+    \newtheorem{theorem}{Theorem}[\bfn@within]
+  \else
+    \newtheorem*{theorem}{Theorem}
+  \fi
+  \bfn@newtheorem{definition}{Definition}
+  \bfn@newtheorem{corollary}{Corollary}
+  \bfn@newtheorem{prop}{Proposition}
+  \bfn@newtheorem{lemma}{Lemma}
+  \bfn@newtheorem{example}{Example}
+  \bfn@newtheorem{obs}{Remark}
+  \bfn@newtheorem{nota}{Notation}
+
+  % language=latex
+\else\if@french
+  \ifbfn@numbered
+    \newtheorem{theorem}{Théorème}[\bfn@within]
+  \else
+    \newtheorem*{theorem}{Théorème}
+  \fi
+  \bfn@newtheorem{definition}{Definition}
+  \bfn@newtheorem{corollary}{Corollaire}
+  \bfn@newtheorem{prop}{Proposition}
+  \bfn@newtheorem{lemma}{Lemme}
+  \bfn@newtheorem{example}{Exemple}
+  \bfn@newtheorem{obs}{Remarque}
+  \bfn@newtheorem{nota}{Notation}
+
+  % language=latex
+\else\if@spanish
+  \ifbfn@numbered
+    \newtheorem{theorem}{Teorema}[\bfn@within]
+  \else
+    \newtheorem*{theorem}{Teorema}
+  \fi
+  \bfn@newtheorem{definition}{Definición}
+  \bfn@newtheorem{corollary}{Corolario}
+  \bfn@newtheorem{prop}{Proposición}
+  \bfn@newtheorem{lemma}{Lema}
+  \bfn@newtheorem{example}{Ejemplo}
+  \bfn@newtheorem{obs}{Observación}
+  \bfn@newtheorem{nota}{Notación}
+\fi\fi\fi
