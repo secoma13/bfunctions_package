@@ -7,6 +7,8 @@
 \RequirePackage{amsfonts}
 \tcbuselibrary{skins}
 
+\definecolor{darkred}{HTML}{9C1E07}
+
 % language flags (initially false)
 \newif\if@spanish
 \newif\if@english
@@ -163,9 +165,20 @@
     \newcommand{\Solution}[1]{{\color{blue}\textbf{Solución:} #1}}
 
 \newcommand{\Highlight}[1]{
-    {\color{red} 
+    {\color{darkred} 
     \textbf{#1}
     }
+}
+
+% --------------------------------------------------------------
+% stars
+% --------------------------------------------------------------
+\newcommand{\OneStar}[0]{
+    ({\color{red}\star})
+}
+
+\newcommand{\TwoStars}[0]{
+    (\color{red}\star\star)
 }
 
 % -----------------------------------------------------------
