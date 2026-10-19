@@ -141,14 +141,18 @@
     \renewcommand{\S}{\mathbf{S}}
     \renewcommand{\H}[0]{\mathbf{H}}
     \newcommand{\T}[0]{\mathbf{T}}
-\fi    
+\fi   
+
+\newcommand{\rg}[1]{
+    \mathrm{rg}\parent{#1}
+}
     
 
 % ---------------------------------------------------
 %  Symbols for differentials and derivatives
 % ---------------------------------------------------
 \newcommand{\diff}[0]{
-    \mathrm{d} \hspace{2 pt}
+    \mathrm{d} \hspace{1 pt}
 }
 
 % Render derivative at a point
@@ -185,32 +189,28 @@
 % ------------------------------------------------------------ç
 
 \if@english
-    \newcommand{\Solution}[1]{\newline \newline{\color{blue}\textbf{Solution:} #1}}
+    \newcommand{\Solution}[1]{{\color{blue}\textbf{Solution:} #1}}
 \else
     \if@french
-        \newcommand{\Solution}[1]{\newline \newline{\color{blue}\textbf{Solution:} #1}}
+        \newcommand{\Solution}[1]{{\color{blue}\textbf{Solution:} #1}}
     \else
         \if@spanish
-            \newcommand{\Solution}[1]{\newline \newline{\color{blue}\textbf{Solución:} #1}}
+            \newcommand{\Solution}[1]{{\color{blue}\textbf{Solución:} #1}}
         \fi
     \fi
 \fi
 
-\newcommand{\Highlight}[1]{
-    {\color{darkred} 
-    \textbf{#1}
-    }
-}
+\newcommand{\Highlight}[1]{{\color{darkred}\textbf{#1}}}
 
 % --------------------------------------------------------------
 % stars
 % --------------------------------------------------------------
 \newcommand{\OneStar}[0]{
-    ({\color{red}\star})
+    ({\color{red}\(\star\)})
 }
 
 \newcommand{\TwoStars}[0]{
-    (\color{red}\star\star)
+    ({\color{red}\(\star\star\)})
 }
 
 % -----------------------------------------------------------
