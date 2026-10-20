@@ -5,6 +5,10 @@ This is a package that contains some basic LaTeX functions that I use often in m
 ### Contact email: [sergiomartinnieto13@gmail.com](sergiomartinnieto13@gmail.com)
 If you find any problems with the package or you have suggestions to improve its functionality, feel free to contact me. 
 
+## Table of Contents
+
+- [Installation](#Installation)
+
 ## Installation
 ### Overleaf
 To get the package to work in Overleaf, dowload the `.sty` file. Then, you have two options. Either you create a new file and paste the contents inside every new project you create, or you create a `New Project` in overleaf whose only file is `bfunctions.sty`. Then click on `New file` -> `From another project` and browse your Overleaf projects until you find `bfunctions.sty` and import it.
@@ -39,6 +43,8 @@ The language option is used to render Theorem, Proposition, Lemma and Definition
 The currently supported languages are english, french and spanish, and the default is English. To see the style of the boxes, check the pdf in the following (repository)[https://github.com/secoma13/TFM] (this is my master's thesis). To use these boxes, one calls them as `\BoxTheorem{#1}{#2}`. The first argument is the name of the theorem (if it has any), and the second is the statement.
 
 Moreover, there are some commands that make it easier to work with brackets and parenthesis. These are `\parent{}, \corch{}, \norm{}, \sqparent{}` and `\abs{}`. They introduce dynamic parenthesis that adjust to the size of the expressions they contain. Finally, there are some commands for expressions that I had to use regularly, such as differentials and derivatives.
+
+A proper documentation file is in progress.
 
 
 
