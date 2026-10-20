@@ -8,6 +8,7 @@ If you find any problems with the package or you have suggestions to improve its
 ## Table of Contents
 
 - [Installation](#Installation)
+- [Detailed explanation](#detailed-explanation)
 
 ## Installation
 ### Overleaf
