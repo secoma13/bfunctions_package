@@ -30,7 +30,7 @@ to create a folder as above, and create the `bfunctions.sty` file inside that fo
 See the following [Tex Stack Exchange](https://tex.stackexchange.com/questions/1137/where-do-i-place-my-own-sty-or-cls-files-to-make-them-available-to-all-my-te/1138#1138) for more details on the installation process.
 
 ## Detailed explanation
-The package can be called with two options: `language` and `font`. The `font` is either `mathb` or `bold`. This controls one of the functions of the package, which is to insert the symbols of some commonly used sets (real, natural, rational numbers etc) faster. Calling the package with the option `mathb` will use the `mathbb` font to display these sets. Then, to get $\mathbb{R}$, one symply types `\R`. Calling the package with the bold font displays `\R` as $\mathbf{R}$
+The package can be called with two options: `language` and `font`. The `font` is either `mathb` or `bold`. This controls one of the functions of the package, which is to insert the symbols of some commonly used sets (real, natural, rational numbers etc) faster. Calling the package with the option `mathb` will use the `mathbb` font to display these sets. Then, to get $\mathbb{R}^2+f(x)-\sqrt{\cos(9)}$, one symply types `\R`. Calling the package with the bold font displays `\R` as $\mathbf{R}$
 
 
 
